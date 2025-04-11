@@ -1,0 +1,44 @@
+.background {
+    /* Fondo aislado con pseudoelemento ::before */
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Texto abajo */
+    align-items: center;
+    font-family: 'Sawarabi Mincho', sans-serif; /* Fuente japonesa */
+    color: white;
+}
+
+.background::before {
+    /* Pseudoelemento para manejar el fondo */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/fondo1.png'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.25); /* Reducir brillo (-75%) */
+    z-index: -1; /* Enviar detrás de los elementos principales */
+}
+
+.emblem img {
+    width: 250px;
+    height: auto;
+    border-radius: 50%;
+    margin-top: 250px;
+    filter: brightness(1); /* Brillo normal para el logo */
+    position: relative;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: white; /* Texto resaltante en blanco */
+    text-shadow: 4px 4px 8px rgba(255, 249, 249, 0.8); /* Sombra elegante */
+    margin-bottom: 80px;
+    position: relative;
+}
