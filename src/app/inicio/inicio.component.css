@@ -1,7 +1,6 @@
 .background {
     /* Fondo aislado con pseudoelemento ::before */
-    position: relative;
-    height: 100vh;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Texto abajo */
@@ -35,10 +34,10 @@
 }
 
 .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: white; /* Texto resaltante en blanco */
     text-shadow: 4px 4px 8px rgba(255, 249, 249, 0.8); /* Sombra elegante */
-    margin-bottom: 80px;
+    margin-bottom: -700px;
     position: relative;
 }
