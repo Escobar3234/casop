@@ -6,7 +6,6 @@
     font-family: 'Sawarabi Mincho', sans-serif;
     color: white;
 }
-
 .background::before {
     content: '';
     position: absolute;
@@ -30,11 +29,18 @@
     position: relative;
 }
 
-.title {
-    font-size: 2.5rem;
-    font-weight: bold;
+.text-button {
+    display: flex;
+    font-size: 2rem; /* Ajusta el tamaño según tus necesidades */
+    font-family: 'Sawarabi Mincho', sans-serif;
+    text-decoration: none;
     color: white;
-    text-shadow: 4px 4px 8px rgba(255, 249, 249, 0.8);
-    margin-bottom: -700px;
-    position: relative;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    margin: 20px 0; /* Espaciado adicional para un buen diseño */
+}
+
+.text-button:hover {
+    color: #f5a623; /* Cambia el color al pasar el mouse */
+    text-shadow: 0 0 5px #f5a623; /* Efecto de brillo */
+    cursor: pointer; /* Muestra el cursor de mano */
 }

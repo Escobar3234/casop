@@ -1,7 +1,10 @@
 import { Routes } from '@angular/router';
-import { InicioComponent } from './inicio/inicio.component'; // asegúrate que la ruta esté bien
+import { InicioComponent } from './inicio/inicio.component'; 
+import { OpcionesComponent } from './opciones/opciones.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
-  { path: 'inicio', component: InicioComponent }
+  { path: 'inicio', component: InicioComponent },
+  { path: 'opciones', component: OpcionesComponent } 
+
 ];
