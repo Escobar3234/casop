@@ -35,8 +35,8 @@
     font-family: 'Sawarabi Mincho', sans-serif;
     text-decoration: none;
     color: white;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-    margin: 20px 0; /* Espaciado adicional para un buen diseño */
+    text-shadow: 0 0 5px #ffffff; /* Efecto de brillo */
+    margin: 90px 0; /* Espaciado adicional para un buen diseño */
 }
 
 .text-button:hover {
