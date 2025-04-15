@@ -36,6 +36,7 @@
     font-weight: bold;
     text-decoration: none;
     color: white;
+
     text-shadow: 0 0 10px white;
     margin: 250px 0; /* Espaciado adicional para un buen diseño */
 }
