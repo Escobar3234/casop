@@ -21,7 +21,7 @@
 }
 
 .emblem img {
-    width: 250px;
+    width: 200px;
     height: auto;
     border-radius: 50%;
     margin-top: 250px;
@@ -33,10 +33,11 @@
     display: flex;
     font-size: 2rem; /* Ajusta el tamaño según tus necesidades */
     font-family: 'Sawarabi Mincho', sans-serif;
+    font-weight: bold;
     text-decoration: none;
     color: white;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-    margin: 20px 0; /* Espaciado adicional para un buen diseño */
+    text-shadow: 0 0 10px white;
+    margin: 250px 0; /* Espaciado adicional para un buen diseño */
 }
 
 .text-button:hover {
