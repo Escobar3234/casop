@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+import { CalendarModule } from 'primeng/calendar';
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { OpcionesComponent } from './opciones/opciones.component';
 import { HInicoComponent } from './h-inico/h-inico.component';
-
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [

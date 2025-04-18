@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-h-inico',  // El nombre del selector se mantiene
+  selector: 'app-h-inico',
   templateUrl: './h-inico.component.html',
-  styleUrls: ['./h-inico.component.css']  // Asegúrate de usar 'styleUrls' (plural)
+  styleUrls: ['./h-inico.component.css']
 })
 export class HInicoComponent {
+  fecha: Date = new Date();
 }
