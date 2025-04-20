@@ -4,7 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { CalendarModule } from 'primeng/calendar';
+
+
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './inicio/inicio.component';
@@ -22,7 +23,6 @@ import { HInicoComponent } from './h-inico/h-inico.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    CalendarModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'inicio', component: InicioComponent },
