@@ -3,9 +3,9 @@
   <div class="dropdown" [class.open]="isDropdownOpen">
     <button class="dropdown-button" (click)="toggleDropdown()">Opciones</button>
     <div class="dropdown-content" *ngIf="isDropdownOpen">
-      <a (click)="irAHabitos()">Hábitos</a>
-      <a (click)="irAPerfil()">Perfil</a>
-      <a (click)="irANotas()">Notas</a>
+      <a (click)="irAHabitos(); toggleDropdown()">Hábitos</a>
+      <a (click)="irAPerfil(); toggleDropdown()">Perfil</a>
+      <a (click)="irANotas(); toggleDropdown()">Notas</a>
       <a (click)="toggleDropdown()">Cerrar</a>
     </div>
   </div>
@@ -42,30 +42,27 @@
   </ol>
 </div>
 
-<!-- Mostrar los hábitos debajo del calendario -->
 <!-- Mostrar hábitos debajo del calendario -->
-<div class="habit-list" *ngIf="habitos.length > 0">
-  <h3>Hábitos para el día {{ selectedDayValue }}:</h3>
-  <ul>
-    <li *ngFor="let habito of habitos">
+<div class="habit-list">
+  <h3 *ngIf="habitosFiltrados.length > 0">Hábitos para el día {{ selectedDayValue }}:</h3>
+  <ul *ngIf="habitosFiltrados.length > 0">
+    <li *ngFor="let habito of habitosFiltrados">
       <strong>{{ habito.nombre }}</strong> - {{ habito.descripcion }} <br>
-      <em>Frecuencia: {{ habito.frecuencia?.tipo }}</em>
+      <em>Frecuencia: {{ habito.tipo }}</em>
     </li>
   </ul>
-</div>
 
-<div class="habit-list" *ngIf="habitos.length === 0">
-  <p>No hay hábitos para este día.</p>
+  <!-- Mensaje si no hay hábitos para el día -->
+  <p *ngIf="habitosFiltrados.length === 0">No hay hábitos para este día.</p>
 </div>
-
 
 <!-- FAB (botón +) -->
 <div class="fab-container">
   <button class="fab-button" (click)="toggleFab()">+</button>
 
   <div class="fab-options" *ngIf="fabOpen">
-    <button (click)="irAHabitos()">Hábitos</button>
-    <button (click)="irANotas()">Notas</button>
+    <button (click)="irAHabitos(); toggleFab()">Hábitos</button>
+    <button (click)="irANotas(); toggleFab()">Notas</button>
   </div>
 </div>
 

@@ -3,6 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+interface Habito {
+  nombre: string;
+  descripcion: string;
+  fecha: string;
+  tipo: string;
+  dias: string[] | number[];
+}
+
 @Component({
   standalone: true,
   selector: 'app-frecuencia',
@@ -26,7 +34,6 @@ export class FrecuenciaComponent {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Verifica si el código se está ejecutando en el navegador
     if (typeof window !== 'undefined' && window.localStorage) {
       const data = localStorage.getItem('habito');
       if (data) {
@@ -64,54 +71,53 @@ export class FrecuenciaComponent {
       console.warn("El nombre del hábito está vacío.");
       return;
     }
-  
-    // Asigna correctamente la fecha seleccionada
-    const fechaSeleccionada = localStorage.getItem('fechaSeleccionada') || new Date().toISOString().split('T')[0];  // Usa la fecha actual si no se encuentra una fecha seleccionada
-  
-    let dias: string[] | number[] = [];  // Declaración de tipo explícito
-  
+
+    const fechaSeleccionada = localStorage.getItem('fechaSeleccionada') || new Date().toISOString().split('T')[0];
+
+    let dias: string[] | number[] = [];
+
     if (this.frecuencia.tipo === 'todos') {
-      // Si el tipo es 'todos', asignamos todos los días del mes
       dias = this.diasDelMes;
     } else if (this.frecuencia.tipo === 'semana') {
       dias = this.frecuencia.diasSemana;
     } else if (this.frecuencia.tipo === 'mes') {
       dias = this.frecuencia.diasMes;
     }
-  
-    const nuevoHabito = {
+
+    const nuevoHabito: Habito = {
       nombre: this.nombre.trim(),
       descripcion: this.descripcion.trim(),
-      fecha: fechaSeleccionada,  // Asegúrate de que la fecha esté asignada correctamente
+      fecha: fechaSeleccionada,
       tipo: this.frecuencia.tipo,
       dias: dias
     };
-  
-    // Verifica si localStorage está disponible antes de usarlo
+
     if (typeof window !== 'undefined' && window.localStorage) {
-      let habitos = JSON.parse(localStorage.getItem('habito') || '[]');
+      let habitos: Habito[] = JSON.parse(localStorage.getItem('habito') || '[]');
       if (!Array.isArray(habitos)) {
         habitos = [];
       }
-  
-      // Si el tipo es 'todos', necesitamos guardar el hábito para cada día del mes
-      if (this.frecuencia.tipo === 'todos') {
-        this.diasDelMes.forEach((dia) => {
-          habitos.push({ ...nuevoHabito, fecha: `${fechaSeleccionada}-${String(dia).padStart(2, '0')}` });
-        });
+
+      const yaExiste = habitos.some((h: Habito) => h.nombre === nuevoHabito.nombre);
+
+      if (!yaExiste) {
+        if (this.frecuencia.tipo === 'todos') {
+          this.diasDelMes.forEach((dia) => {
+            habitos.push({ ...nuevoHabito, fecha: `${fechaSeleccionada}-${String(dia).padStart(2, '0')}` });
+          });
+        } else {
+          habitos.push(nuevoHabito);
+        }
+
+        localStorage.setItem('habito', JSON.stringify(habitos));
+        console.log("Hábito guardado:", nuevoHabito);
       } else {
-        habitos.push(nuevoHabito);
+        console.warn("Este hábito ya existe y no será duplicado.");
       }
-  
-      localStorage.setItem('habito', JSON.stringify(habitos));
-  
-      console.log("Hábito guardado:", nuevoHabito);
-  
-      // Redirigir a 'h-inico' después de guardar el hábito
+
       this.router.navigate(['/h-inico']);
     } else {
       console.error("localStorage no está disponible.");
     }
   }
-  
 }

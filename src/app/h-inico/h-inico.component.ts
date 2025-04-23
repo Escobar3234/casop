@@ -20,13 +20,7 @@ interface DayObject {
 })
 export class HInicoComponent implements OnInit {
   week: string[] = [
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
-    "Sábado",
-    "Domingo"
+    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
   ];
 
   monthSelect: DayObject[] = [];
@@ -35,11 +29,12 @@ export class HInicoComponent implements OnInit {
   selectedDayValue: number = this.today.date();
   isDropdownOpen = false;
   habitos: any[] = [];
+  fabOpen = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.getDaysFromDate(4, 2025);
+    this.getDaysFromDate(this.today.month() + 1, this.today.year());
     this.cargarHabitos();
   }
 
@@ -76,7 +71,6 @@ export class HInicoComponent implements OnInit {
 
   clickDay(day: DayObject): void {
     this.selectedDayValue = day.value;
-
     const formattedDay = String(day.value).padStart(2, '0');
     const fecha = `${this.dateSelect.format('YYYY-MM')}-${formattedDay}`;
 
@@ -91,8 +85,6 @@ export class HInicoComponent implements OnInit {
   irAInicio() {
     this.router.navigate(['/inicio']);
   }
-
-  fabOpen = false;
 
   toggleFab(): void {
     this.fabOpen = !this.fabOpen;
@@ -125,45 +117,54 @@ export class HInicoComponent implements OnInit {
   }
 
   cargarHabitos(): void {
-    const data = localStorage.getItem('habito');
-    if (data) {
-      try {
-        const todosHabitos = JSON.parse(data);
-        if (Array.isArray(todosHabitos)) {
-          // Filtrar duplicados por nombre y tipo (o lo que definas)
-          const hash = new Set();
-          this.habitos = todosHabitos.filter((h: any) => {
-            const clave = `${h.nombre}-${h.tipo}`;
-            if (hash.has(clave)) {
-              return false;
-            }
-            hash.add(clave);
-            return true;
-          });
-        } else {
-          this.habitos = [];
+    if (typeof window !== 'undefined') {
+      const data = localStorage.getItem('habito');
+      if (data) {
+        try {
+          const todosHabitos = JSON.parse(data);
+          this.habitos = Array.isArray(todosHabitos) ? todosHabitos : [];
+        } catch (err) {
+          console.error("Error parseando hábitos:", err);
         }
-      } catch (err) {
-        console.error("Error parseando hábitos:", err);
       }
     }
   }
-  
 
   deberiaMostrarHabito(habito: any): boolean {
     const currentDate = this.dateSelect.clone().date(this.selectedDayValue);
-    const diaSemana = currentDate.format('dddd'); // "Lunes", etc.
-    const diaMes = currentDate.date(); // 1, 2, ..., 31
+    const diaSemana = currentDate.format('dddd');
+    const diaMes = currentDate.date();
 
-    switch (habito.tipo) {
-      case 'todos':
-        return true;
-      case 'semana':
-        return habito.dias.includes(diaSemana);
-      case 'mes':
-        return habito.dias.includes(diaMes);
-      default:
-        return false;
+    // Si el hábito es para todos los días
+    if (habito.tipo === 'todos') {
+      return true; // Mostrar el hábito para todos los días
     }
+
+    // Si el hábito es para una semana específica
+    if (habito.tipo === 'semana') {
+      return habito.dias.includes(diaSemana); // Mostrar si el día de la semana está incluido
+    }
+
+    // Si el hábito es para días específicos del mes
+    if (habito.tipo === 'mes') {
+      return habito.dias.includes(diaMes); // Mostrar solo en días específicos del mes
+    }
+
+    return false;
   }
+
+  get habitosFiltrados(): any[] {
+    const filtrados = this.habitos.filter(h => this.deberiaMostrarHabito(h));
+  
+    // Eliminar duplicados por nombre
+    const unicos = new Map();
+    filtrados.forEach(h => {
+      if (!unicos.has(h.nombre)) {
+        unicos.set(h.nombre, h);
+      }
+    });
+  
+    return Array.from(unicos.values());
+  }
+  
 }
