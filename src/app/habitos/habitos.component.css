@@ -1,0 +1,35 @@
+.habito-container {
+    /* background-image: url('assets/fondo-japones.jpg'); cambia la ruta si el fondo es diferente */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+    color: black;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: white;
+    color: black;
+  }
+  

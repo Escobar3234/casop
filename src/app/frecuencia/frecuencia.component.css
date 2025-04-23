@@ -1,0 +1,27 @@
+.frecuencia-container {
+    padding: 20px;
+    color: rgb(0, 0, 0); 
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .dias-semana label, .dias-mes label {
+    display: inline-block;
+    margin: 5px;
+  }
+  
+  .opcion-frecuencia {
+    margin-bottom: 10px;
+  }
+  
+  .dias-semana, .dias-mes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .dia-checkbox {
+    margin-right: 10px;
+  }
+  

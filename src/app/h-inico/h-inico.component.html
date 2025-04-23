@@ -1,26 +1,86 @@
-<div>
-    <div class="header-calendario">
-      <div>
-        <button (click)="changeMonth(-1)" class="btn-prev">ANTES</button>
-      </div>
-      <h1>{{ dateSelect.format('MMMM, YYYY') }}</h1>
-      <div>
-        <button (click)="changeMonth(1)" class="btn-next">SIGUIENTE</button>
-      </div>
+<!-- Barra superior con dropdown -->
+<div class="top-bar">
+  <div class="dropdown" [class.open]="isDropdownOpen">
+    <button class="dropdown-button" (click)="toggleDropdown()">Opciones</button>
+    <div class="dropdown-content" *ngIf="isDropdownOpen">
+      <a (click)="irAHabitos()">Hábitos</a>
+      <a (click)="irAPerfil()">Perfil</a>
+      <a (click)="irANotas()">Notas</a>
+      <a (click)="toggleDropdown()">Cerrar</a>
     </div>
-  
-    <!-- Nombres de los días -->
-    <ol>
-      <li *ngFor="let day of week" class="day-name">{{ day | slice: 0:3 }}</li>
-  
-      <!-- Días del mes -->
-      <li
-        *ngFor="let day of monthSelect; let i = index"
-        (click)="clickDay(day)"
-        [style.gridColumnStart]="i === 0 ? day.indexWeek : 'auto'"
-      >
-        <span>{{ day?.value }}</span>
-      </li>
-    </ol>
   </div>
-  
+
+  <span class="selected-info">
+    {{ selectedDayValue === today.date() && dateSelect.isSame(today, 'month') ? 'Hoy' : 'Día ' + selectedDayValue }}
+  </span>
+</div>
+
+<!-- Calendario -->
+<div class="wrapper-calendar">
+  <div class="header-calendar">
+    <button (click)="changeMonth(-1)" class="btn-prev">ANTES</button>
+    <h1>{{ dateSelect.format('MMMM, YYYY') }}</h1>
+    <button (click)="changeMonth(1)" class="btn-next">SIGUIENTE</button>
+  </div>
+
+  <!-- Nombres de los días -->
+  <ol>
+    <li *ngFor="let day of week" class="day-name">{{ day | slice: 0:3 }}</li>
+
+    <!-- Días del mes -->
+    <li
+      *ngFor="let day of monthSelect; let i = index"
+      (click)="clickDay(day)" 
+      [style.gridColumnStart]="i === 0 ? day.indexWeek : 'auto'"
+      [ngClass]="{
+        'selected': day.value === selectedDayValue && dateSelect.isSame(today, 'month'),
+        'today': day.value === today.date() && dateSelect.isSame(today, 'month')
+      }"
+    >
+      <span>{{ day?.value }}</span>
+    </li>
+  </ol>
+</div>
+
+<!-- Mostrar los hábitos debajo del calendario -->
+<!-- Mostrar hábitos debajo del calendario -->
+<div class="habit-list" *ngIf="habitos.length > 0">
+  <h3>Hábitos para el día {{ selectedDayValue }}:</h3>
+  <ul>
+    <li *ngFor="let habito of habitos">
+      <strong>{{ habito.nombre }}</strong> - {{ habito.descripcion }} <br>
+      <em>Frecuencia: {{ habito.frecuencia?.tipo }}</em>
+    </li>
+  </ul>
+</div>
+
+<div class="habit-list" *ngIf="habitos.length === 0">
+  <p>No hay hábitos para este día.</p>
+</div>
+
+
+<!-- FAB (botón +) -->
+<div class="fab-container">
+  <button class="fab-button" (click)="toggleFab()">+</button>
+
+  <div class="fab-options" *ngIf="fabOpen">
+    <button (click)="irAHabitos()">Hábitos</button>
+    <button (click)="irANotas()">Notas</button>
+  </div>
+</div>
+
+<!-- Bottom Tabs -->
+<div class="bottom-tabs">
+  <div class="tab" (click)="irAHabitos()">
+    <ion-icon name="list-outline"></ion-icon>
+    <span>Hábitos</span>
+  </div>
+  <div class="tab" (click)="irAPerfil()">
+    <ion-icon name="person-outline"></ion-icon>
+    <span>Perfil</span>
+  </div>
+  <div class="tab" (click)="irANotas()">
+    <ion-icon name="create-outline"></ion-icon>
+    <span>Notas</span>
+  </div>
+</div>

@@ -1,35 +1,50 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
-
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 
 
 import { AppComponent } from './app.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { OpcionesComponent } from './opciones/opciones.component';
 import { HInicoComponent } from './h-inico/h-inico.component';
+import { NotasComponent } from './notas/notas.component';
+import { HabitosComponent } from './habitos/habitos.component';
+import { FrecuenciaComponent } from './frecuencia/frecuencia.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     InicioComponent,
     OpcionesComponent,
-    HInicoComponent
+    HInicoComponent,
+    NotasComponent, 
+    HabitosComponent,
+    FrecuenciaComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    CommonModule,
+    IonicModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
       { path: 'inicio', component: InicioComponent },
       { path: 'opciones', component: OpcionesComponent },
-      { path: 'h-inico', component: HInicoComponent }
+      { path: 'h-inico', component: HInicoComponent },
+      { path: 'notas/:fecha', component: NotasComponent },
+      { path: 'habitos/:fecha', component: HabitosComponent },
+      { path: 'frecuencia', component: FrecuenciaComponent }, 
+      
     ])
+    
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // <-- Esto permite usar los tags de Ionic
   providers: [],
   bootstrap: [AppComponent]
 })
