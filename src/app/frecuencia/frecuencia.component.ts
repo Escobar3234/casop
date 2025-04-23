@@ -8,7 +8,7 @@ interface Habito {
   descripcion: string;
   fecha: string;
   tipo: string;
-  dias: string[] | number[];
+  dias: (string | number)[];
 }
 
 @Component({
@@ -74,7 +74,7 @@ export class FrecuenciaComponent {
 
     const fechaSeleccionada = localStorage.getItem('fechaSeleccionada') || new Date().toISOString().split('T')[0];
 
-    let dias: string[] | number[] = [];
+    let dias: (string | number)[] = [];
 
     if (this.frecuencia.tipo === 'todos') {
       dias = this.diasDelMes;
@@ -98,12 +98,22 @@ export class FrecuenciaComponent {
         habitos = [];
       }
 
-      const yaExiste = habitos.some((h: Habito) => h.nombre === nuevoHabito.nombre);
+      const yaExiste = habitos.some((h: Habito) => {
+        if (Array.isArray(h.dias) && Array.isArray(nuevoHabito.dias)) {
+          return h.nombre === nuevoHabito.nombre && h.fecha === nuevoHabito.fecha &&
+            h.tipo === nuevoHabito.tipo &&
+            h.dias.every((d: string | number) => (nuevoHabito.dias as (string | number)[]).includes(d));
+        }
+        return false;
+      });
 
       if (!yaExiste) {
         if (this.frecuencia.tipo === 'todos') {
           this.diasDelMes.forEach((dia) => {
-            habitos.push({ ...nuevoHabito, fecha: `${fechaSeleccionada}-${String(dia).padStart(2, '0')}` });
+            const fechaHabito = `${fechaSeleccionada}-${String(dia).padStart(2, '0')}`;
+            if (!habitos.some(h => h.fecha === fechaHabito && h.nombre === nuevoHabito.nombre)) {
+              habitos.push({ ...nuevoHabito, fecha: fechaHabito });
+            }
           });
         } else {
           habitos.push(nuevoHabito);

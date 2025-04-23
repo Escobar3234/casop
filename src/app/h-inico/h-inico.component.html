@@ -9,7 +9,6 @@
       <a (click)="toggleDropdown()">Cerrar</a>
     </div>
   </div>
-
   <span class="selected-info">
     {{ selectedDayValue === today.date() && dateSelect.isSame(today, 'month') ? 'Hoy' : 'Día ' + selectedDayValue }}
   </span>
@@ -30,17 +29,18 @@
     <!-- Días del mes -->
     <li
       *ngFor="let day of monthSelect; let i = index"
-      (click)="clickDay(day)" 
-      [style.gridColumnStart]="i === 0 ? day.indexWeek : 'auto'"
       [ngClass]="{
-        'selected': day.value === selectedDayValue && dateSelect.isSame(today, 'month'),
-        'today': day.value === today.date() && dateSelect.isSame(today, 'month')
+        'selected': day?.value === selectedDayValue && dateSelect.isSame(today, 'month'),
+        'today': day?.value === today.date() && dateSelect.isSame(today, 'month')
       }"
+      [style.gridColumnStart]="day ? i === 0 ? day.indexWeek : 'auto' : 'auto'"
+      (click)="clickDay(day)"
     >
-      <span>{{ day?.value }}</span>
+      <span *ngIf="day">{{ day?.value }}</span>
     </li>
   </ol>
 </div>
+
 
 <!-- Mostrar hábitos debajo del calendario -->
 <div class="habit-list">
@@ -51,15 +51,12 @@
       <em>Frecuencia: {{ habito.tipo }}</em>
     </li>
   </ul>
-
-  <!-- Mensaje si no hay hábitos para el día -->
   <p *ngIf="habitosFiltrados.length === 0">No hay hábitos para este día.</p>
 </div>
 
 <!-- FAB (botón +) -->
 <div class="fab-container">
   <button class="fab-button" (click)="toggleFab()">+</button>
-
   <div class="fab-options" *ngIf="fabOpen">
     <button (click)="irAHabitos(); toggleFab()">Hábitos</button>
     <button (click)="irANotas(); toggleFab()">Notas</button>

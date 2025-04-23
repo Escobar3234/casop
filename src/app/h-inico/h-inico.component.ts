@@ -29,13 +29,52 @@ export class HInicoComponent implements OnInit {
   selectedDayValue: number = this.today.date();
   isDropdownOpen = false;
   habitos: any[] = [];
+  habitosFiltrados: any[] = []; // Agregado para filtrar los hábitos
   fabOpen = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
+    moment.locale('es');
     this.getDaysFromDate(this.today.month() + 1, this.today.year());
     this.cargarHabitos();
+  }
+
+  agregarHabito(nuevoHabito: any): void {
+    let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
+  
+    // Verificar si el hábito ya existe
+    const index = habitosGuardados.findIndex((habito: any) => habito.nombre === nuevoHabito.nombre && habito.fecha === nuevoHabito.fecha);
+  
+    if (index === -1) {
+      // Si el hábito no existe, agregarlo a la lista
+      habitosGuardados.push(nuevoHabito);
+    } else {
+      // Si el hábito ya existe, se puede actualizar si lo deseas o simplemente ignorarlo
+      console.log("El hábito ya existe y no se sobrescribirá.");
+    }
+  
+    // Guardamos la lista de hábitos en el localStorage
+    localStorage.setItem('habito', JSON.stringify(habitosGuardados));
+  
+    // Verificar lo que se ha guardado
+    console.log('Hábitos guardados:', JSON.parse(localStorage.getItem('habito') || '[]'));
+  }
+
+  cargarHabitos(): void {
+    if (typeof window !== 'undefined') {
+      const data = localStorage.getItem('habito');
+      if (data) {
+        try {
+          const todosHabitos = JSON.parse(data);
+          console.log('Hábitos cargados:', todosHabitos);
+          this.habitos = Array.isArray(todosHabitos) ? todosHabitos : [];
+          this.filtrarHabitosPorDia(); // Filtrar los hábitos después de cargarlos
+        } catch (err) {
+          console.error("Error parseando hábitos:", err);
+        }
+      }
+    }
   }
 
   getDaysFromDate(month: number, year: number): void {
@@ -74,9 +113,55 @@ export class HInicoComponent implements OnInit {
     const formattedDay = String(day.value).padStart(2, '0');
     const fecha = `${this.dateSelect.format('YYYY-MM')}-${formattedDay}`;
 
+    console.log('🖱 Día seleccionado:', day.name, '| Fecha:', fecha);
     localStorage.setItem('fechaSeleccionada', fecha);
-    this.cargarHabitos();
+    this.filtrarHabitosPorDia(); // Filtrar los hábitos cuando se selecciona un día
   }
+
+  filtrarHabitosPorDia(): void {
+    this.habitosFiltrados = this.habitos.filter(h => this.deberiaMostrarHabito(h));
+  }
+
+  deberiaMostrarHabito(habito: any): boolean {
+    const dia = String(this.selectedDayValue).padStart(2, '0');
+    const currentDate = moment(`${this.dateSelect.format('YYYY-MM')}-${dia}`);
+    const diaSemana = currentDate.clone().locale('es').format('dddd');
+    const diaMes = currentDate.date();
+  
+    // Normalizar el nombre del día de la semana
+    const normalizar = (texto: string): string => {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/^\w/, c => c.toUpperCase());
+    };
+  
+    const diaSemanaNormalizado = normalizar(diaSemana);
+  
+    // Verificar los días guardados
+    console.log('🧠 Día de la semana actual:', diaSemanaNormalizado);
+    console.log('🔍 Días del hábito:', habito.dias);
+  
+    // Si el hábito es para todos los días
+    if (habito.tipo === 'todos') {
+      return true;
+    }
+  
+    // Si el hábito es semanal
+    if (habito.tipo === 'semana') {
+      const diasSemanaNormalizados = (habito.dias as string[]).map(normalizar);
+      return diasSemanaNormalizados.includes(diaSemanaNormalizado);
+    }
+  
+    // Si el hábito es mensual
+    if (habito.tipo === 'mes') {
+      console.log('🔍 Comprobando si el día seleccionado está en los días del hábito (mes):', habito.dias);
+      return (habito.dias as number[]).includes(diaMes); // Asegúrate de que el día del mes se compara correctamente
+    }
+  
+    return false;
+  }  
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -115,56 +200,4 @@ export class HInicoComponent implements OnInit {
       this.isDropdownOpen = false;
     }
   }
-
-  cargarHabitos(): void {
-    if (typeof window !== 'undefined') {
-      const data = localStorage.getItem('habito');
-      if (data) {
-        try {
-          const todosHabitos = JSON.parse(data);
-          this.habitos = Array.isArray(todosHabitos) ? todosHabitos : [];
-        } catch (err) {
-          console.error("Error parseando hábitos:", err);
-        }
-      }
-    }
-  }
-
-  deberiaMostrarHabito(habito: any): boolean {
-    const currentDate = this.dateSelect.clone().date(this.selectedDayValue);
-    const diaSemana = currentDate.format('dddd');
-    const diaMes = currentDate.date();
-
-    // Si el hábito es para todos los días
-    if (habito.tipo === 'todos') {
-      return true; // Mostrar el hábito para todos los días
-    }
-
-    // Si el hábito es para una semana específica
-    if (habito.tipo === 'semana') {
-      return habito.dias.includes(diaSemana); // Mostrar si el día de la semana está incluido
-    }
-
-    // Si el hábito es para días específicos del mes
-    if (habito.tipo === 'mes') {
-      return habito.dias.includes(diaMes); // Mostrar solo en días específicos del mes
-    }
-
-    return false;
-  }
-
-  get habitosFiltrados(): any[] {
-    const filtrados = this.habitos.filter(h => this.deberiaMostrarHabito(h));
-  
-    // Eliminar duplicados por nombre
-    const unicos = new Map();
-    filtrados.forEach(h => {
-      if (!unicos.has(h.nombre)) {
-        unicos.set(h.nombre, h);
-      }
-    });
-  
-    return Array.from(unicos.values());
-  }
-  
 }
