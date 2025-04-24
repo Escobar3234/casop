@@ -1,9 +1,16 @@
 <div class="background"></div>
 <div class="top-bar">
   <div class="dropdown" [class.open]="isDropdownOpen">
-    <button class="dropdown-button" (click)="toggleSidebar()"><img src="assets/icono_menu.png" alt=""></button>
-  </div>
 
+    <button class="dropdown-button" (click)="toggleSidebar()"><img src="assets/icono_menu.png" alt=""></button>
+    <button class="dropdown-button" (click)="toggleDropdown()">Opciones</button>
+    <div class="dropdown-content" *ngIf="isDropdownOpen">
+      <a (click)="irAHabitos(); toggleDropdown()">Hábitos</a>
+      <a (click)="irAPerfil(); toggleDropdown()">Perfil</a>
+      <a (click)="irANotas(); toggleDropdown()">Notas</a>
+      <a (click)="toggleDropdown()">Cerrar</a>
+    </div>
+  </div>
   <span class="selected-info">
     {{ selectedDayValue === today.date() && dateSelect.isSame(today, 'month') ? 'Hoy' : 'Día ' + selectedDayValue }}
   </span>
@@ -52,42 +59,37 @@
     <!-- Días del mes -->
     <li
       *ngFor="let day of monthSelect; let i = index"
-      (click)="clickDay(day)" 
-      [style.gridColumnStart]="i === 0 ? day.indexWeek : 'auto'"
       [ngClass]="{
-        'selected': day.value === selectedDayValue && dateSelect.isSame(today, 'month'),
-        'today': day.value === today.date() && dateSelect.isSame(today, 'month')
+        'selected': day?.value === selectedDayValue && dateSelect.isSame(today, 'month'),
+        'today': day?.value === today.date() && dateSelect.isSame(today, 'month')
       }"
+      [style.gridColumnStart]="day ? i === 0 ? day.indexWeek : 'auto' : 'auto'"
+      (click)="clickDay(day)"
     >
-      <span>{{ day?.value }}</span>
+      <span *ngIf="day">{{ day?.value }}</span>
     </li>
   </ol>
 </div>
 
-<!-- Mostrar los hábitos debajo del calendario -->
 <!-- Mostrar hábitos debajo del calendario -->
-<div class="habit-list" *ngIf="habitos.length > 0">
-  <h3>Hábitos para el día {{ selectedDayValue }}:</h3>
-  <ul>
-    <li *ngFor="let habito of habitos">
+<div class="habit-list">
+  <h3 *ngIf="habitosFiltrados.length > 0">Hábitos para el día {{ selectedDayValue }}:</h3>
+  <ul *ngIf="habitosFiltrados.length > 0">
+    <li *ngFor="let habito of habitosFiltrados">
       <strong>{{ habito.nombre }}</strong> - {{ habito.descripcion }} <br>
-      <em>Frecuencia: {{ habito.frecuencia?.tipo }}</em>
+      <em>Frecuencia: {{ habito.tipo }}</em>
     </li>
   </ul>
-</div>
-
-<div class="habit-list" *ngIf="habitos.length === 0">
-  <p>No hay hábitos para este día.</p>
+  <p *ngIf="habitosFiltrados.length === 0">No hay hábitos para este día.</p>
 </div>
 
 
 <!-- FAB (botón +) -->
 <div class="fab-container">
   <button class="fab-button" (click)="toggleFab()">+</button>
-
   <div class="fab-options" *ngIf="fabOpen">
-    <button (click)="irAHabitos()">Hábitos</button>
-    <button (click)="irANotas()">Notas</button>
+    <button (click)="irAHabitos(); toggleFab()">Hábitos</button>
+    <button (click)="irANotas(); toggleFab()">Notas</button>
   </div>
 </div>
 
