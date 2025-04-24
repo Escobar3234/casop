@@ -3,7 +3,6 @@
   <div class="dropdown" [class.open]="isDropdownOpen">
 
     <button class="dropdown-button" (click)="toggleSidebar()"><img src="assets/icono_menu.png" alt=""></button>
-    <button class="dropdown-button" (click)="toggleDropdown()">Opciones</button>
     <div class="dropdown-content" *ngIf="isDropdownOpen">
       <a (click)="irAHabitos(); toggleDropdown()">Hábitos</a>
       <a (click)="irAPerfil(); toggleDropdown()">Perfil</a>
