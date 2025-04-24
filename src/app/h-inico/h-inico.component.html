@@ -41,7 +41,6 @@
   </ol>
 </div>
 
-
 <!-- Mostrar hábitos debajo del calendario -->
 <div class="habit-list">
   <h3 *ngIf="habitosFiltrados.length > 0">Hábitos para el día {{ selectedDayValue }}:</h3>
@@ -53,6 +52,7 @@
   </ul>
   <p *ngIf="habitosFiltrados.length === 0">No hay hábitos para este día.</p>
 </div>
+
 
 <!-- FAB (botón +) -->
 <div class="fab-container">

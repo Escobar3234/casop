@@ -41,11 +41,13 @@ export class HInicoComponent implements OnInit {
   }
 
   agregarHabito(nuevoHabito: any): void {
-    let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
+    console.log('Nuevo hábito recibido:', nuevoHabito); // Verifica la estructura del objeto
   
+    let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
+    
     // Verificar si el hábito ya existe
     const index = habitosGuardados.findIndex((habito: any) => habito.nombre === nuevoHabito.nombre && habito.fecha === nuevoHabito.fecha);
-  
+    
     if (index === -1) {
       // Si el hábito no existe, agregarlo a la lista
       habitosGuardados.push(nuevoHabito);
@@ -53,13 +55,14 @@ export class HInicoComponent implements OnInit {
       // Si el hábito ya existe, se puede actualizar si lo deseas o simplemente ignorarlo
       console.log("El hábito ya existe y no se sobrescribirá.");
     }
-  
+    
     // Guardamos la lista de hábitos en el localStorage
     localStorage.setItem('habito', JSON.stringify(habitosGuardados));
-  
+    
     // Verificar lo que se ha guardado
     console.log('Hábitos guardados:', JSON.parse(localStorage.getItem('habito') || '[]'));
   }
+  
 
   cargarHabitos(): void {
     if (typeof window !== 'undefined') {
@@ -67,7 +70,7 @@ export class HInicoComponent implements OnInit {
       if (data) {
         try {
           const todosHabitos = JSON.parse(data);
-          console.log('Hábitos cargados:', todosHabitos);
+          console.log('Hábitos cargados desde localStorage:', todosHabitos);
           this.habitos = Array.isArray(todosHabitos) ? todosHabitos : [];
           this.filtrarHabitosPorDia(); // Filtrar los hábitos después de cargarlos
         } catch (err) {
@@ -75,7 +78,7 @@ export class HInicoComponent implements OnInit {
         }
       }
     }
-  }
+  }  
 
   getDaysFromDate(month: number, year: number): void {
     const startDate = moment.utc(`${year}-${String(month).padStart(2, '0')}-01`);
@@ -121,14 +124,14 @@ export class HInicoComponent implements OnInit {
   filtrarHabitosPorDia(): void {
     this.habitosFiltrados = this.habitos.filter(h => this.deberiaMostrarHabito(h));
   }
-
-  deberiaMostrarHabito(habito: any): boolean {
-    const dia = String(this.selectedDayValue).padStart(2, '0');
-    const currentDate = moment(`${this.dateSelect.format('YYYY-MM')}-${dia}`);
-    const diaSemana = currentDate.clone().locale('es').format('dddd');
-    const diaMes = currentDate.date();
   
-    // Normalizar el nombre del día de la semana
+  deberiaMostrarHabito(habito: any): boolean {
+    const diaSeleccionado = this.selectedDayValue; // Día que el usuario seleccionó
+    const currentDate = moment(`${this.dateSelect.format('YYYY-MM')}-${String(diaSeleccionado).padStart(2, '0')}`);
+    const diaSemana = currentDate.format('dddd'); // Nombre del día en español, e.g., "Lunes"
+    const diaMes = currentDate.date(); // El día del mes
+  
+    // Normalización del nombre del día para comparar con los valores almacenados
     const normalizar = (texto: string): string => {
       return texto
         .normalize("NFD")
@@ -139,13 +142,9 @@ export class HInicoComponent implements OnInit {
   
     const diaSemanaNormalizado = normalizar(diaSemana);
   
-    // Verificar los días guardados
-    console.log('🧠 Día de la semana actual:', diaSemanaNormalizado);
-    console.log('🔍 Días del hábito:', habito.dias);
-  
     // Si el hábito es para todos los días
     if (habito.tipo === 'todos') {
-      return true;
+      return true; // Esto asegura que todos los hábitos "todos los días" se muestren siempre
     }
   
     // Si el hábito es semanal
@@ -156,12 +155,13 @@ export class HInicoComponent implements OnInit {
   
     // Si el hábito es mensual
     if (habito.tipo === 'mes') {
-      console.log('🔍 Comprobando si el día seleccionado está en los días del hábito (mes):', habito.dias);
-      return (habito.dias as number[]).includes(diaMes); // Asegúrate de que el día del mes se compara correctamente
+      return (habito.dias as number[]).includes(diaMes);
     }
   
     return false;
-  }  
+  }
+  
+  
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
