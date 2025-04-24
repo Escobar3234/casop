@@ -84,6 +84,12 @@ export class HInicoComponent implements OnInit {
     this.cargarHabitos();
   }
 
+  isSidebarVisible = false;
+
+  toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
+
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
@@ -115,6 +121,8 @@ export class HInicoComponent implements OnInit {
   abrirModal() {
     console.log('Abrir Modal');
   }
+
+  fechaActual: Date = new Date();
 
   @HostListener('document:click', ['$event'])
   closeDropdownOnOutsideClick(event: MouseEvent) {

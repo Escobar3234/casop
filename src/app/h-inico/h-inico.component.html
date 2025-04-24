@@ -1,19 +1,41 @@
-<!-- Barra superior con dropdown -->
+<div class="background"></div>
 <div class="top-bar">
   <div class="dropdown" [class.open]="isDropdownOpen">
-    <button class="dropdown-button" (click)="toggleDropdown()">Opciones</button>
-    <div class="dropdown-content" *ngIf="isDropdownOpen">
-      <a (click)="irAHabitos()">Hábitos</a>
-      <a (click)="irAPerfil()">Perfil</a>
-      <a (click)="irANotas()">Notas</a>
-      <a (click)="toggleDropdown()">Cerrar</a>
-    </div>
+    <button class="dropdown-button" (click)="toggleSidebar()"><img src="assets/icono_menu.png" alt=""></button>
   </div>
 
   <span class="selected-info">
     {{ selectedDayValue === today.date() && dateSelect.isSame(today, 'month') ? 'Hoy' : 'Día ' + selectedDayValue }}
   </span>
 </div>
+
+<!-- Barra lateral -->
+<div class="sidebar" [class.open]="isSidebarVisible">
+  <h3>Hola Usuario,<br>Bienvenido a Takumi Notes.<br><br> para el usuario:</h3>
+
+  <p>
+    Tu día es una oportunidad para crecer Cada amanecer trae consigo la posibilidad de avanzar, de mejorar y de construir la vida que deseas. A veces, la clave para lograrlo no está en hacer más, sino en hacerlo mejor.<br>
+    <br>
+    Organiza tu día con notas, pequeñas herramientas que te ayudarán a visualizar lo que realmente importa. Anota tus prioridades, fija objetivos alcanzables y celebra cada pequeño progreso.<br>
+    <br>
+    Pequeños hábitos, grandes cambios:</p>
+    <ul>
+      <li>Dedica unos minutos cada mañana para escribir lo que quieres lograr.</li>
+      <li>Haz pausas estratégicas para reajustar tu enfoque si te desvías.</li>
+      <li>Evalúa tu jornada al final del día y reconoce tus avances, por pequeños que sean.</li>
+    </ul>
+    <p>Recuerda que la organización no es sobre llenar tu día de tareas, sino sobre darle sentido y equilibrio. Tu bienestar y tu éxito empiezan con un solo paso.<br>
+    <br>
+    Haz de hoy un día que realmente sume a tu vida. Tú puedes lograrlo.</p>
+
+  <div class="div-final">
+    <p>{{ fechaActual | date:'fullDate' }}</p>
+  </div>
+  
+</div>
+
+<!-- Capa para cerrar la sidebar al hacer clic fuera -->
+<div class="sidebar-backdrop" *ngIf="isSidebarVisible" (click)="toggleSidebar()"></div>
 
 <!-- Calendario -->
 <div class="wrapper-calendar">
