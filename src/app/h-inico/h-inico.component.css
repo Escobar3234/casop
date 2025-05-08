@@ -79,6 +79,16 @@
   box-shadow: 0 0 0px #e4e4e4;
 }
 
+
+.header-calendar button ion-icon {
+  color: black !important;
+  font-size: 24px;
+}
+
+
+
+
+
 div {
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,

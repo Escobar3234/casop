@@ -46,9 +46,13 @@
 <!-- Calendario -->
 <div class="wrapper-calendar">
   <div class="header-calendar">
-    <button (click)="changeMonth(-1)" class="btn-prev">ANTES</button>
+    <button (click)="changeMonth(-1)" class="btn-prev">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
     <h1>{{ dateSelect.format('MMMM, YYYY') }}</h1>
-    <button (click)="changeMonth(1)" class="btn-next">SIGUIENTE</button>
+    <button (click)="changeMonth(1)" class="btn-next">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>    
   </div>
 
   <!-- Nombres de los días -->
@@ -97,10 +101,6 @@
   <div class="tab" (click)="irAHabitos()">
     <ion-icon name="list-outline"></ion-icon>
     <span>Hábitos</span>
-  </div>
-  <div class="tab" (click)="irAPerfil()">
-    <ion-icon name="person-outline"></ion-icon>
-    <span>Perfil</span>
   </div>
   <div class="tab" (click)="irANotas()">
     <ion-icon name="create-outline"></ion-icon>
