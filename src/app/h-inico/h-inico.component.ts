@@ -42,59 +42,73 @@ export class HInicoComponent implements OnInit {
     this.cargarHabitos(); // 🔧 MODIFICADO
   }
 
-  agregarHabito(nuevoHabito: any): void {
-    console.log('Nuevo hábito recibido:', nuevoHabito);
-  
-    let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
-    
-    const index = habitosGuardados.findIndex((habito: any) => habito.nombre === nuevoHabito.nombre && habito.fecha === nuevoHabito.fecha);
-    
-    if (index === -1) {
-      habitosGuardados.push(nuevoHabito);
-    } else {
-      console.log("El hábito ya existe y no se sobrescribirá.");
-    }
+agregarHabito(nuevoHabito: any): void {
+  console.log('Nuevo hábito recibido:', nuevoHabito);
 
+  let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
+
+  const claveNuevo = `${nuevoHabito.nombre}-${nuevoHabito.fecha || ''}-${nuevoHabito.tipo}`;
+  const yaExiste = habitosGuardados.some((h: any) => {
+    const claveExistente = `${h.nombre}-${h.fecha || ''}-${h.tipo}`;
+    return claveExistente === claveNuevo;
+  });
+
+  if (!yaExiste) {
+    habitosGuardados.push(nuevoHabito);
     localStorage.setItem('habito', JSON.stringify(habitosGuardados));
-    console.log('Hábitos guardados:', JSON.parse(localStorage.getItem('habito') || '[]'));
+    console.log('Hábitos guardados:', habitosGuardados);
+  } else {
+    console.log("El hábito ya existe y no se guardará de nuevo.");
   }
+}
+
 
   // 🔧 MODIFICADO: Se añadió carga de hábitos diarios tipo "todos"
-  cargarHabitos(): void {
-    this.habitos = [];
+ cargarHabitos(): void {
+  this.habitos = [];
 
-    // Cargar hábitos globales
-    const data = localStorage.getItem('habito');
-    if (data) {
+  const conjuntoHabitos = new Map<string, any>();
+
+  const agregarSinDuplicar = (habito: any) => {
+    const clave = this.generarClaveUnica(habito);
+    if (!conjuntoHabitos.has(clave)) {
+      conjuntoHabitos.set(clave, habito);
+    }
+  };
+
+  const data = localStorage.getItem('habito');
+  if (data) {
+    try {
+      const todosHabitos = JSON.parse(data);
+      if (Array.isArray(todosHabitos)) {
+        todosHabitos.forEach(agregarSinDuplicar);
+      }
+    } catch (err) {
+      console.error("Error parseando hábitos globales:", err);
+    }
+  }
+
+  for (let i = 1; i <= 31; i++) {
+    const dia = String(i).padStart(2, '0');
+    const clave = `${this.dateSelect.format('YYYY-MM')}-${dia}`;
+    const dataDia = localStorage.getItem(clave);
+    if (dataDia) {
       try {
-        const todosHabitos = JSON.parse(data);
-        if (Array.isArray(todosHabitos)) {
-          this.habitos = [...todosHabitos];
+        const habitosDelDia = JSON.parse(dataDia);
+        if (Array.isArray(habitosDelDia)) {
+          habitosDelDia.forEach(agregarSinDuplicar);
         }
       } catch (err) {
-        console.error("Error parseando hábitos globales:", err);
+        console.error(`Error al leer hábitos para ${clave}:`, err);
       }
     }
-
-    // Cargar hábitos por día (tipo "todos")
-    for (let i = 1; i <= 31; i++) {
-      const dia = String(i).padStart(2, '0');
-      const clave = `${this.dateSelect.format('YYYY-MM')}-${dia}`;
-      const dataDia = localStorage.getItem(clave);
-      if (dataDia) {
-        try {
-          const habitosDelDia = JSON.parse(dataDia);
-          if (Array.isArray(habitosDelDia)) {
-            this.habitos = [...this.habitos, ...habitosDelDia];
-          }
-        } catch (err) {
-          console.error(`Error al leer hábitos para ${clave}:`, err);
-        }
-      }
-    }
-
-    this.filtrarHabitosPorDia();
   }
+
+  this.habitos = Array.from(conjuntoHabitos.values());
+  this.filtrarHabitosPorDia();
+}
+
+
 
   getDaysFromDate(month: number, year: number): void {
     const startDate = moment.utc(`${year}-${String(month).padStart(2, '0')}-01`);
@@ -213,6 +227,14 @@ export class HInicoComponent implements OnInit {
   }
 
   fechaActual: Date = new Date();
+
+
+
+private generarClaveUnica(habito: any): string {
+  return `${habito.nombre}-${habito.tipo}-${habito.frecuencia || ''}`;
+}
+
+
 
   @HostListener('document:click', ['$event'])
   closeDropdownOnOutsideClick(event: MouseEvent) {
