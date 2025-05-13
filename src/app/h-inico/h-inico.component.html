@@ -78,13 +78,24 @@
 <div class="habit-list">
   <h3 *ngIf="habitosFiltrados.length > 0">Hábitos para el día {{ selectedDayValue }}:</h3>
   <ul *ngIf="habitosFiltrados.length > 0">
-    <li *ngFor="let habito of habitosFiltrados">
-      <strong>{{ habito.nombre }}</strong> - {{ habito.descripcion }} <br>
-      <em>Frecuencia: {{ habito.tipo }}</em>
+    <li *ngFor="let habito of habitosFiltrados"
+        (click)="toggleSeleccion(habito)"
+        [class.seleccionado]="esSeleccionado(habito)"
+        style="cursor: pointer; padding: 8px; border-radius: 6px; margin-bottom: 5px; display: flex; align-items: center;">
+        
+      <span style="margin-right: 8px;" *ngIf="esSeleccionado(habito)">✅</span>
+      
+      <div>
+        <strong *ngIf="esSeleccionado(habito)">{{ habito.nombre }}</strong>
+        <span *ngIf="!esSeleccionado(habito)">{{ habito.nombre }}</span>
+        - {{ habito.descripcion || habito.valor || '' }}<br>
+        <em>Frecuencia: {{ habito.tipo }}</em>
+      </div>
     </li>
   </ul>
   <p *ngIf="habitosFiltrados.length === 0">No hay hábitos para este día.</p>
 </div>
+
 
 
 <!-- FAB (botón +) -->

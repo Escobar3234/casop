@@ -109,6 +109,22 @@ agregarHabito(nuevoHabito: any): void {
 }
 
 
+seleccionados: any[] = [];
+
+toggleSeleccion(habito: any): void {
+  const index = this.seleccionados.indexOf(habito);
+  if (index >= 0) {
+    this.seleccionados.splice(index, 1);
+  } else {
+    this.seleccionados.push(habito);
+  }
+}
+
+esSeleccionado(habito: any): boolean {
+  return this.seleccionados.includes(habito);
+}
+
+
 
   getDaysFromDate(month: number, year: number): void {
     const startDate = moment.utc(`${year}-${String(month).padStart(2, '0')}-01`);
