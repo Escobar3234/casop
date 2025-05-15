@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing'; // para mockear Router
 import { NotasVistaComponent } from './notas-vista.component';
 
 describe('NotasVistaComponent', () => {
@@ -8,9 +8,9 @@ describe('NotasVistaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotasVistaComponent]
-    })
-    .compileComponents();
+      declarations: [NotasVistaComponent],
+      imports: [RouterTestingModule] // Importar RouterTestingModule para el router
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NotasVistaComponent);
     component = fixture.componentInstance;

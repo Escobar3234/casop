@@ -6,6 +6,7 @@ import { NotasComponent } from './notas/notas.component';
 import { HabitosComponent } from './habitos/habitos.component';
 import { FrecuenciaComponent } from './frecuencia/frecuencia.component';
 import { NotasVistaComponent } from './notas-vista/notas-vista.component';
+import { NuevaNotaComponent } from './nueva-nota/nueva-nota.component';
 
 
 export const routes: Routes = [
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path : 'habitos/:fecha', component: HabitosComponent },
   { path: 'frecuencia', component: FrecuenciaComponent },
   { path: 'notas-vista', component: NotasVistaComponent },
+  { path: 'notas', component: NuevaNotaComponent },
 
 ];
