@@ -80,7 +80,7 @@ export class FrecuenciaComponent {
   
     if (this.frecuencia.tipo === 'todos') {
       dias = this.diasDelMes;  // Aquí estamos usando los días del mes.
-      console.log("Tipo seleccionado: TODOS, días:", dias);  // Verificar que 'todos' está seleccionado
+      console.log("Tipo seleccionado: todos, días:", dias);  // Verificar que 'todos' está seleccionado
     } else if (this.frecuencia.tipo === 'semana') {
       dias = this.frecuencia.diasSemana;
     } else if (this.frecuencia.tipo === 'mes') {

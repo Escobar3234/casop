@@ -44,22 +44,14 @@ export class HInicoComponent implements OnInit {
     console.log('Nuevo hábito recibido:', nuevoHabito); // Verifica la estructura del objeto
   
     let habitosGuardados = JSON.parse(localStorage.getItem('habito') || '[]');
-    
-    // Verificar si el hábito ya existe
     const index = habitosGuardados.findIndex((habito: any) => habito.nombre === nuevoHabito.nombre && habito.fecha === nuevoHabito.fecha);
     
     if (index === -1) {
-      // Si el hábito no existe, agregarlo a la lista
       habitosGuardados.push(nuevoHabito);
     } else {
-      // Si el hábito ya existe, se puede actualizar si lo deseas o simplemente ignorarlo
       console.log("El hábito ya existe y no se sobrescribirá.");
     }
-    
-    // Guardamos la lista de hábitos en el localStorage
     localStorage.setItem('habito', JSON.stringify(habitosGuardados));
-    
-    // Verificar lo que se ha guardado
     console.log('Hábitos guardados:', JSON.parse(localStorage.getItem('habito') || '[]'));
   }
   
@@ -72,7 +64,7 @@ export class HInicoComponent implements OnInit {
           const todosHabitos = JSON.parse(data);
           console.log('Hábitos cargados desde localStorage:', todosHabitos);
           this.habitos = Array.isArray(todosHabitos) ? todosHabitos : [];
-          this.filtrarHabitosPorDia(); // Filtrar los hábitos después de cargarlos
+          this.filtrarHabitosPorDia(); 
         } catch (err) {
           console.error("Error parseando hábitos:", err);
         }
@@ -118,7 +110,7 @@ export class HInicoComponent implements OnInit {
 
     console.log('🖱 Día seleccionado:', day.name, '| Fecha:', fecha);
     localStorage.setItem('fechaSeleccionada', fecha);
-    this.filtrarHabitosPorDia(); // Filtrar los hábitos cuando se selecciona un día
+    this.filtrarHabitosPorDia();
   }
 
   filtrarHabitosPorDia(): void {
@@ -126,12 +118,11 @@ export class HInicoComponent implements OnInit {
   }
   
   deberiaMostrarHabito(habito: any): boolean {
-    const diaSeleccionado = this.selectedDayValue; // Día que el usuario seleccionó
+    const diaSeleccionado = this.selectedDayValue; 
     const currentDate = moment(`${this.dateSelect.format('YYYY-MM')}-${String(diaSeleccionado).padStart(2, '0')}`);
-    const diaSemana = currentDate.format('dddd'); // Nombre del día en español, e.g., "Lunes"
-    const diaMes = currentDate.date(); // El día del mes
+    const diaSemana = currentDate.format('dddd'); 
+    const diaMes = currentDate.date(); 
   
-    // Normalización del nombre del día para comparar con los valores almacenados
     const normalizar = (texto: string): string => {
       return texto
         .normalize("NFD")
@@ -142,18 +133,15 @@ export class HInicoComponent implements OnInit {
   
     const diaSemanaNormalizado = normalizar(diaSemana);
   
-    // Si el hábito es para todos los días
     if (habito.tipo === 'todos') {
-      return true; // Esto asegura que todos los hábitos "todos los días" se muestren siempre
+      return true; 
     }
-  
-    // Si el hábito es semanal
+
     if (habito.tipo === 'semana') {
       const diasSemanaNormalizados = (habito.dias as string[]).map(normalizar);
       return diasSemanaNormalizados.includes(diaSemanaNormalizado);
     }
   
-    // Si el hábito es mensual
     if (habito.tipo === 'mes') {
       return (habito.dias as number[]).includes(diaMes);
     }
