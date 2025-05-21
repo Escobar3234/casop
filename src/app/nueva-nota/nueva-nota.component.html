@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<div class="form-container">
+  <h2>Nueva Nota</h2>
+
+  <label for="titulo">Título</label>
+  <input id="titulo" [(ngModel)]="titulo" placeholder="Título" />
+
+  <label for="contenido">Contenido</label>
+  <textarea id="contenido" [(ngModel)]="contenido" placeholder="Contenido"></textarea>
+
+  <label for="categoria">Categoría</label>
+  <select id="categoria" [(ngModel)]="categoria">
+    <option value="Trabajos">Trabajos</option>
+    <option value="Ideas">Ideas</option>
+    <option value="Compras">Compras</option>
+  </select>
+
+  <label for="color">Color</label>
+  <input id="color" type="color" [(ngModel)]="color" />
+
+  
+</div>
+
+</html>

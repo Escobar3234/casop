@@ -14,6 +14,7 @@ import { HInicoComponent } from './h-inico/h-inico.component';
 import { NotasComponent } from './notas/notas.component';
 import { HabitosComponent } from './habitos/habitos.component';
 import { FrecuenciaComponent } from './frecuencia/frecuencia.component';
+import { NotasVistaComponent } from './notas-vista/notas-vista.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { FrecuenciaComponent } from './frecuencia/frecuencia.component';
     NotasComponent, 
     HabitosComponent,
     FrecuenciaComponent,
+    NotasVistaComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +42,7 @@ import { FrecuenciaComponent } from './frecuencia/frecuencia.component';
       { path: 'notas/:fecha', component: NotasComponent },
       { path: 'habitos/:fecha', component: HabitosComponent },
       { path: 'frecuencia', component: FrecuenciaComponent }, 
+      { path: 'notas-vista', component: NotasVistaComponent },
       
     ])
     

@@ -45,6 +45,19 @@
 }
 
 
+.background::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/poo.jpg');
+  background-size: cover;
+  background-position: center;
+  
+  z-index: -1;
+}
 /* Calendario */
 .selected {
   background-color: #4caf50;
@@ -65,6 +78,20 @@
   border: solid 1px #eaeaea;
   box-shadow: 0 0 0px #e4e4e4;
 }
+
+
+.header-calendar button ion-icon {
+  color: black !important;
+  font-size: 24px;
+}
+
+
+.seleccionado {
+  background-color: #e0f7fa;
+  font-weight: bold;
+}
+
+
 
 div {
   text-align: center;
@@ -139,10 +166,9 @@ li:hover {
 }
 
 .dropdown-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 16px;
-  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  size: 10px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
@@ -232,6 +258,70 @@ li:hover {
 
 .fab-options button:hover {
   background-color: #e0e0e0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px; /* completamente fuera de pantalla */
+  width: 250px;
+  height: 100%;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease-in-out;
+  z-index: 1001;
+}
+
+.sidebar.open {
+  left: 0; /* aparece */
+}
+
+.sidebar h3 {
+  text-align: left;
+  font-weight: bold;
+}
+
+.sidebar p {
+  text-align: left;
+  font-size: 14px;
+}
+
+.sidebar ul {
+  
+  padding: 20px;
+}
+
+.sidebar ul li {
+  margin: 0px;
+  padding: 0px;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Fondo para cerrar la barra haciendo clic afuera */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.div-final {
+  position: fixed;
+  bottom: 0;
+}
+
+.div-final p {
+  width: 60%;
+  height: 60px;
+  text-align: left; /* opcional, para centrar el texto */
+  font-size: 22px;     /* ⬅️ Aquí aumentas el tamaño */
+  font-weight: bold;   /* opcional, para resaltar más */
 }
 
 @keyframes slideUp {
